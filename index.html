@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+  <!DOCTYPE html>
 <html lang="es" class="h-full bg-slate-50 antialiased selection:bg-sky-500 selection:text-white">
 <head>
     <meta charset="UTF-8">
@@ -85,42 +86,61 @@
 </head>
 <body class="min-h-full flex flex-col justify-between text-slate-800 bg-[#f8fafc]">
 
-    <!-- MODAL EMERGENTE PWA (PANTALLA DE INICIO) -->
-    <div id="pwa-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-none">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 space-y-5 text-center transform transition-transform duration-300 scale-95" id="pwa-modal-card">
-            <div class="w-16 h-16 bg-brand-50 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-sm border border-brand-100">
-                📲
-            </div>
-            <div class="space-y-2">
-                <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Guarda tu Tarjeta VIP</h3>
-                <p id="pwa-instructions" class="text-xs text-slate-500 leading-relaxed">
-                    Instala esta aplicación en tu pantalla de inicio para acceder rápidamente a tus cupones y beneficios exclusivos en cualquier momento.
-                </p>
-            </div>
-
-            <!-- INSTRUCCIONES ESPECÍFICAS SEGÚN SO -->
-            <div id="ios-steps" class="hidden bg-slate-50 p-3.5 rounded-2xl text-left border border-slate-200/60 text-xs text-slate-600 space-y-1.5">
-                <p class="font-bold text-slate-800">Para iPhone (Safari):</p>
-                <p>1. Toca el botón <strong>Compartir</strong> <span class="inline-block px-1 bg-slate-200 rounded">⎋</span> en la parte inferior.</p>
-                <p>2. Selecciona <strong>"Agregar a inicio"</strong> <span class="inline-block px-1 bg-slate-200 rounded">➕</span>.</p>
+    <!-- MODAL EMERGENTE DE CONTACTO / PWA -->
+    <div id="contact-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm transition-opacity duration-300 opacity-100">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 space-y-5 text-center transform transition-transform duration-300 scale-100" id="contact-modal-card">
+            
+            <div class="relative w-20 h-20 mx-auto">
+                <!-- Asegúrate de colocar la ruta y nombre correcto de la foto aquí -->
+                <img src="host.jpg" alt="Cristina" class="w-20 h-20 rounded-full object-cover ring-4 ring-brand-100 shadow-md" onerror="this.src='https://ui-avatars.com/api/?name=Cristina&background=0284c7&color=fff&size=128'">
+                <span class="absolute bottom-0 right-0 bg-emerald-500 text-white rounded-full p-1 shadow-sm border-2 border-white">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                </span>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 pt-2">
-                <button onclick="closePwaModal()" class="w-full bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 text-xs font-extrabold py-3 px-4 rounded-xl transition-all">
+            <div class="space-y-1">
+                <span class="text-[10px] font-extrabold uppercase tracking-widest text-brand-600 bg-brand-50 px-2.5 py-0.5 rounded-full">Anfitriona VIP</span>
+                <h3 class="text-xl font-extrabold text-slate-900 tracking-tight">Cristina</h3>
+                <p class="text-xs font-semibold text-slate-600">Host Airbnb &bull; Condominio Torre Blanca Acapulco</p>
+            </div>
+
+            <!-- DATOS DE CONTACTO DE CRISTINA -->
+            <div class="bg-slate-50 p-3.5 rounded-2xl text-left border border-slate-200/70 text-xs space-y-2 text-slate-700">
+                <div class="flex items-center gap-2">
+                    <span class="text-base">📞</span>
+                    <a href="tel:+525543635553" class="font-semibold hover:text-brand-600 transition-colors">+52 5543635553</a>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-base">✉️</span>
+                    <a href="mailto:contacto@2host.net" class="font-semibold hover:text-brand-600 transition-colors">contacto@2host.net</a>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-base">🌐</span>
+                    <a href="https://2host.net" target="_blank" class="font-semibold hover:text-brand-600 transition-colors">2host.net</a>
+                </div>
+                <div class="pt-1.5 border-t border-slate-200/60 text-[11px] text-amber-800 font-medium flex items-start gap-1.5">
+                    <span>💡</span>
+                    <span><em>Ofertas VIP para huéspedes frecuentes.</em></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-1">
+                <button id="btn-omitir" onclick="destroyModal()" class="w-full bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 text-xs font-extrabold py-3 px-4 rounded-xl transition-all">
                     Omitir
                 </button>
-                <button id="pwa-action-btn" onclick="handlePwaInstall()" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-95 text-white text-xs font-extrabold py-3 px-4 rounded-xl transition-all shadow-md">
-                    Guardar
+                <button id="btn-guardar" onclick="downloadVCard()" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-95 text-white text-xs font-extrabold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>Guardar</span>
                 </button>
             </div>
         </div>
     </div>
 
     <!-- NOTIFICACIÓN TOAST -->
-    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transform -translate-y-16 opacity-0 pointer-events-none">
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transform -translate-y-16 opacity-0 pointer-events-none transition-all">
         <div class="bg-slate-900/90 backdrop-blur-md text-white text-xs font-semibold px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 border border-slate-700/50">
             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-            <span id="toast-text">¡Código copiado al portapapeles!</span>
+            <span id="toast-text">¡Contacto guardado exitosamente!</span>
         </div>
     </div>
 
@@ -128,12 +148,12 @@
     <main class="max-w-xl mx-auto px-4 py-6 sm:px-6 w-full space-y-6">
 
         <!-- BANNER PWA DISCRETO -->
-        <div onclick="openPwaModal()" class="cursor-pointer bg-slate-900 text-slate-200 px-4 py-2.5 rounded-2xl text-[11px] font-medium flex items-center justify-between shadow-sm border border-slate-800 hover:border-slate-700 transition-colors">
+        <div onclick="openContactModal()" class="cursor-pointer bg-slate-900 text-slate-200 px-4 py-2.5 rounded-2xl text-[11px] font-medium flex items-center justify-between shadow-sm border border-slate-800 hover:border-slate-700 transition-colors">
             <span class="flex items-center gap-2">
                 <span>📱</span>
-                <span>Guarda esta app en tu pantalla de inicio</span>
+                <span>Guarda el contacto VIP de la anfitriona</span>
             </span>
-            <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full font-bold text-brand-300">Instalar</span>
+            <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full font-bold text-brand-300">Contacto</span>
         </div>
 
         <!-- HEADER CON AVATAR -->
@@ -143,7 +163,7 @@
             <div class="flex items-center gap-4 relative z-10">
                 <div class="shrink-0">
                     <div class="w-[56px] h-[56px] rounded-full ring-2 ring-slate-200/80 p-0.5 overflow-hidden shadow-sm bg-slate-50">
-                        <img src="host.jpg" alt="Anfitriona 2host" class="w-full h-full object-cover rounded-full">
+                        <img src="host.jpg" alt="Cristina 2host" class="w-full h-full object-cover rounded-full" onerror="this.src='https://ui-avatars.com/api/?name=Cristina&background=0284c7&color=fff&size=128'">
                     </div>
                 </div>
 
@@ -205,7 +225,7 @@
 
             <div class="grid grid-cols-1 gap-3.5">
                 
-                <!-- Ticket 1: Escapada Express -->
+                <!-- Ticket 1 -->
                 <div class="bg-white rounded-2xl p-4 shadow-ticket border border-slate-200/80 relative overflow-hidden">
                     <div class="ticket-notch-left"></div>
                     <div class="ticket-notch-right"></div>
@@ -225,14 +245,14 @@
                             <span>ESCAPA15</span>
                             <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                         </button>
-                        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20ESCAPA15%20para%20Escapada%20Express" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
+                        <a href="https://wa.me/525543635553?text=Hola%20Cristina%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20ESCAPA15%20para%20Escapada%20Express" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
                             <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                             Redimir
                         </a>
                     </div>
                 </div>
 
-                <!-- Ticket 2: Semana Completa -->
+                <!-- Ticket 2 -->
                 <div class="bg-white rounded-2xl p-4 shadow-ticket border border-slate-200/80 relative overflow-hidden">
                     <div class="ticket-notch-left"></div>
                     <div class="ticket-notch-right"></div>
@@ -252,14 +272,14 @@
                             <span>SEMANA20</span>
                             <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                         </button>
-                        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20SEMANA20%20para%20Semana%20Completa" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
+                        <a href="https://wa.me/525543635553?text=Hola%20Cristina%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20SEMANA20%20para%20Semana%20Completa" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
                             <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                             Redimir
                         </a>
                     </div>
                 </div>
 
-                <!-- Ticket 3: Súper Estancia -->
+                <!-- Ticket 3 -->
                 <div class="bg-white rounded-2xl p-4 shadow-ticket border border-slate-200/80 relative overflow-hidden">
                     <div class="ticket-notch-left"></div>
                     <div class="ticket-notch-right"></div>
@@ -279,14 +299,14 @@
                             <span>ESTANCIA25</span>
                             <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                         </button>
-                        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20ESTANCIA25%20para%20S%C3%BAper%20Estancia" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
+                        <a href="https://wa.me/525543635553?text=Hola%20Cristina%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20ESTANCIA25%20para%20S%C3%BAper%20Estancia" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
                             <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                             Redimir
                         </a>
                     </div>
                 </div>
 
-                <!-- Ticket 4: Anticipada Vacacional Temporada Alta -->
+                <!-- Ticket 4 -->
                 <div class="bg-white rounded-2xl p-4 shadow-ticket border border-slate-200/80 relative overflow-hidden">
                     <div class="ticket-notch-left"></div>
                     <div class="ticket-notch-right"></div>
@@ -306,8 +326,8 @@
                             <span>EARLY10</span>
                             <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                         </button>
-                        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20EARLY10%20para%20Anticipada%20Vacacional%20Temporada%20Alta" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
-                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                        <a href="https://wa.me/525543635553?text=Hola%20Cristina%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20EARLY10%20para%20Anticipada%20Vacacional%20Temporada%20Alta" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                             Redimir
                         </a>
                     </div>
@@ -326,7 +346,7 @@
 
                 <div class="pt-1">
                     <a href="https://api.whatsapp.com/send?text=Hola!%20te%20comparto%20estos%20descuentos%20de%20alojamiento%20en%20acapulco%2C%20estan%20geniales." target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                         <span>Compartir Descuentos por WhatsApp</span>
                     </a>
                 </div>
@@ -377,7 +397,7 @@
                                 Ver en Airbnb
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             </a>
-                            <a href="https://wa.me/527771357748?text=Hola%202host%2C%20me%20interesa%20reservar%20Descanso%20Total%20directamente" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5">
+                            <a href="https://wa.me/525543635553?text=Hola%20Cristina%2C%20me%20interesa%20reservar%20Descanso%20Total%20directamente" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5">
                                 <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                                 Cotizar Directo
                             </a>
@@ -418,10 +438,10 @@
                         <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
                             <a href="https://airbnb.mx/h/hoteles-en-acapulco" target="_blank" class="text-xs font-bold text-slate-700 hover:text-brand-600 flex items-center gap-1 transition-colors">
                                 Ver en Airbnb
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="ico" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             </a>
-                            <a href="https://wa.me/527771357748?text=Hola%202host%2C%20me%20interesa%20reservar%20Escapada%20Rom%C3%A1ntica%20directamente" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5">
-                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                            <a href="https://wa.me/525543635553?text=Hola%20Cristina%2C%20me%20interesa%20reservar%20Escapada%20Rom%C3%A1ntica%20directamente" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                                 Cotizar Directo
                             </a>
                         </div>
@@ -444,7 +464,7 @@
                         </div>
 
                         <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full border border-white/10">
-                            Residencia de Huespedes
+                            Residencia de Huéspedes
                         </div>
                     </div>
 
@@ -463,8 +483,8 @@
                                 Ver en Airbnb
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             </a>
-                            <a href="https://wa.me/527771357748?text=Hola%202host%2C%20me%20interesa%20reservar%20Condominio%20Torre%20Blanca%20directamente" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5">
-                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                            <a href="https://wa.me/525543635553?text=Hola%20Cristina%2C%20me%20interesa%20reservar%20Condominio%20Torre%20Blanca%20directamente" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                                 Cotizar Directo
                             </a>
                         </div>
@@ -492,8 +512,8 @@
                 </div>
 
                 <div class="pt-2">
-                    <a href="https://wa.me/527771357748?text=Hola%202host%2C%20necesito%20disponibilidad%20para%20un%20grupo%20grande" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                    <a href="https://wa.me/525543635553?text=Hola%20Cristina%2C%20necesito%20disponibilidad%20para%20un%20grupo%20grande" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                         <span>Consultar Disponibilidad para Grupos</span>
                     </a>
                 </div>
@@ -515,146 +535,154 @@
 
         <!-- MÉTODOS Y FACILIDADES DE PAGO -->
         <section class="bg-white rounded-3xl p-6 shadow-premium border border-slate-100 space-y-4">
-            <div class="flex items-start gap-4">
-                <div class="w-10 h-10 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0 border border-brand-100">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                </div>
-                <div class="space-y-1">
-                    <h3 class="text-sm font-bold text-slate-900">Métodos y Facilidades de Pago</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        Puedes pagar tu estancia mediante <strong class="text-slate-700">depósito bancario, transferencia o tarjeta de crédito a 3 meses sin intereses</strong>.
-                    </p>
-                </div>
-            </div>
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Métodos y Facilidades de Pago
+            </h3>
+            
+            <p class="text-xs text-slate-600 leading-relaxed">
+                Puedes pagar tu estancia mediante <strong class="text-slate-800">depósito bancario, transferencia o tarjeta de crédito a 3 meses sin intereses</strong>.
+            </p>
 
-            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 text-[11px] text-slate-600 space-y-1">
-                <p class="font-bold text-slate-800">Tu información está 100% protegida:</p>
-                <p class="leading-relaxed">Te compartiremos un enlace directo generado a través de <strong>Mercado Pago</strong> para que ingreses los datos de tu tarjeta de forma completamente segura. Nosotros nunca te solicitaremos información confidencial.</p>
+            <!-- BLOQUE DESTACADO DE MERCADO PAGO -->
+            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 text-xs text-slate-600 leading-relaxed space-y-1">
+                <p><strong class="text-slate-800 font-bold">Tu información está 100% protegida:</strong> Te compartiremos un enlace directo generado a través de <strong class="text-slate-800 font-bold">Mercado Pago</strong> para que ingreses los datos de tu tarjeta de forma completamente segura. Nosotros nunca te solicitaremos información confidencial.</p>
             </div>
         </section>
 
-        <!-- ACORDEÓN TÉRMINOS Y CONDICIONES -->
-        <section class="bg-white rounded-3xl p-6 shadow-premium border border-slate-100 space-y-3">
-            <button onclick="toggleAccordion()" class="w-full flex items-center justify-between text-left focus:outline-none group">
-                <span class="text-sm font-bold text-slate-900 group-hover:text-brand-600 transition-colors">Términos y Condiciones del Club VIP</span>
-                <svg id="accordion-icon" class="w-4 h-4 text-slate-500 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-            </button>
+        <!-- TÉRMINOS Y CONDICIONES DEL CLUB VIP -->
 
-            <div id="accordion-content" class="hidden text-xs text-slate-500 space-y-2 pt-2 border-t border-slate-100 leading-relaxed">
-                <p>• Los cupones de descuento no son acumulables con otras promociones.</p>
-                <p>• Descuentos no aplicables en temporada súper alta ni puentes festivos, salvo previa autorización por escrito del anfitrión.</p>
-                <p>• Vigencia de los códigos promocionales: 12 meses a partir de la emisión de esta tarjeta digital.</p>
-                <p>• El beneficio de referido ($500 MXN o late check-out) se aplicará únicamente cuando la persona referida complete efectivamente su estancia.</p>
-                <p>• Los descuentos se aplican en las tarifas del total final de Airbnb para las mismas fechas.</p>
-            </div>
+<details class="bg-slate-50 border border-slate-200 rounded-xl overflow-hidden group">
+    <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-slate-800 hover:bg-slate-100 transition-colors list-none select-none">
+        <span class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            Términos y Condiciones del Club VIP
+        </span>
+        <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+    </summary>
+    
+    <div class="p-4 pt-2 border-t border-slate-200 text-xs text-slate-600 space-y-2 leading-relaxed">
+        <p>1. Los cupones de descuento no son acumulables con otras promociones.</p>
+        <p>2. Descuentos no aplicables en temporada súper alta ni puentes festivos, salvo previa autorización por escrito del anfitrión.</p>
+        <p>3. Vigencia de los códigos promocionales: 12 meses a partir de la emisión de esta tarjeta digital .</p>
+        <p>4. El beneficio de referido ($500 MXN o late check-out) se aplicará únicamente cuando la persona referida complete efectivamente su estancia.</p>
+<p>5. Los descuentos se aplican en las tarifas del total final de Airbnb .</p>
+    </div>
+</details>
+        
         </section>
+
+        <!-- FOOTER Y CRÉDITOS DEL DESARROLLADOR -->
+        <footer class="text-center text-xs text-slate-400 py-6 space-y-4">
+            <p>© 2026 2host - Condominio Torre Blanca Acapulco. Todos los derechos reservados.</p>
+            <p>Contacto: <a href="mailto:contacto@2host.net" class="underline hover:text-brand-600">contacto@2host.net</a> | <a href="https://2host.net" target="_blank" class="underline hover:text-brand-600">2host.net</a></p>
+            
+            <!-- BOTÓN DEL DESARROLLADOR -->
+            <div class="pt-2">
+<a href="https://2host.net" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs font-bold py-2 px-5 rounded-full transition-all shadow-sm">
+    <span>Diseñado y desarrollado por 2host.net</span>
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+</a>
+                
+            </div>
+        </footer>
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="mt-12 py-6 px-4 text-center border-t border-slate-200/60 bg-white space-y-3">
-        <p class="text-[11px] text-slate-500 font-medium">
-            ¿Te gustaría una app de fidelización como esta para tus alojamientos?
-        </p>
-        <div>
-            <a href="https://2host.net" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs font-bold py-2 px-5 rounded-full transition-all shadow-sm">
-                <span>Diseñado y desarrollado por 2host</span>
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-            </a>
-        </div>
-        <p class="text-[10px] text-slate-400 pt-2">© 2026 2host. Todos los derechos reservados.</p>
-    </footer>
-
     <!-- SCRIPTS -->
     <script>
-        // Copiar Código y Mostrar Toast
+        // Abrir Modal
+        function openContactModal() {
+            const modal = document.getElementById('contact-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+            } else {
+                location.reload();
+            }
+        }
+
+        // Destruye el modal del DOM
+        function destroyModal() {
+            const modal = document.getElementById('contact-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // Descarga vCard
+        function downloadVCard() {
+            const vcardContent = [
+                'BEGIN:VCARD',
+                'VERSION:3.0',
+                'FN:Cristina',
+                'N:;Cristina;;;',
+                'ORG:condominio torre blanca acapulco',
+                'TITLE:host airbnb',
+                'TEL;TYPE=CELL:+525543635553',
+                'EMAIL;TYPE=INTERNET:contacto@2host.net',
+                'URL:https://2host.net',
+                'NOTE:ofertas vip para huespedes frecuentes',
+                'END:VCARD'
+            ].join('\r\n');
+
+            const blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'Cristina_2host.vcf');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            showToast('¡Contacto de Cristina guardado!');
+            destroyModal();
+        }
+
+        // Copia un código al portapapeles
         function copyCode(code, name) {
-            navigator.clipboard.writeText(code).then(() => {
-                const toast = document.getElementById('toast');
-                const toastText = document.getElementById('toast-text');
-                toastText.innerText = `¡Código ${code} copiado al portapapeles!`;
-                
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(code).then(() => {
+                    showToast(`¡Código ${code} copiado!`);
+                }).catch(() => {
+                    showToast(`Cupón: ${code}`);
+                });
+            } else {
+                showToast(`Cupón: ${code}`);
+            }
+        }
+
+        // Muestra notificación Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            if (toast && toastText) {
+                toastText.innerText = message;
                 toast.classList.remove('-translate-y-16', 'opacity-0', 'pointer-events-none');
                 toast.classList.add('translate-y-0', 'opacity-100');
-
                 setTimeout(() => {
                     toast.classList.remove('translate-y-0', 'opacity-100');
                     toast.classList.add('-translate-y-16', 'opacity-0', 'pointer-events-none');
-                }, 2500);
-            });
-        }
-
-        // Acordeón Términos y Condiciones
-        function toggleAccordion() {
-            const content = document.getElementById('accordion-content');
-            const icon = document.getElementById('accordion-icon');
-            content.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
-        }
-
-        // Modal PWA
-        const pwaModal = document.getElementById('pwa-modal');
-        const pwaModalCard = document.getElementById('pwa-modal-card');
-        const iosSteps = document.getElementById('ios-steps');
-        const pwaInstructions = document.getElementById('pwa-instructions');
-        const pwaActionBtn = document.getElementById('pwa-action-btn');
-
-        let deferredPrompt = null;
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-        });
-
-        function openPwaModal() {
-            pwaModal.classList.remove('opacity-0', 'pointer-events-none');
-            pwaModal.classList.add('opacity-100');
-            pwaModalCard.classList.remove('scale-95');
-            pwaModalCard.classList.add('scale-100');
-
-            const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            if (isIos) {
-                iosSteps.classList.remove('hidden');
-                pwaInstructions.innerText = "Sigue estos sencillos pasos para guardar tu tarjeta VIP en la pantalla de inicio de tu dispositivo:";
-                pwaActionBtn.style.display = 'none';
+                }, 3000);
             }
         }
 
-        function closePwaModal() {
-            pwaModal.classList.remove('opacity-100');
-            pwaModal.classList.add('opacity-0', 'pointer-events-none');
-            pwaModalCard.classList.remove('scale-100');
-            pwaModalCard.classList.add('scale-95');
-        }
-
-        function handlePwaInstall() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('Usuario aceptó instalar la PWA');
-                    }
-                    deferredPrompt = null;
-                    closePwaModal();
-                });
-            } else {
-                alert("Para guardar en tu pantalla de inicio, usa el menú de opciones de tu navegador (Añadir a la pantalla principal).");
-                closePwaModal();
-            }
-        }
-
-        // Carruseles Automáticos e Interactivos para Alojamientos
+        // Lógica de carruseles
         document.querySelectorAll('[id^="carousel-"]').forEach(carousel => {
             const track = carousel.querySelector('.carousel-track');
             const dots = carousel.querySelectorAll('.dot');
-            const slides = track.querySelectorAll('img');
             let currentIndex = 0;
-            const slideCount = slides.length;
+            const total = dots.length;
 
-            function updateCarousel(index) {
-                track.style.transform = `translateX(-${index * 100}%)`;
-                dots.forEach((dot, idx) => {
-                    if (idx === index) {
+            function goToSlide(index) {
+                currentIndex = index;
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                dots.forEach((dot, i) => {
+                    if (i === currentIndex) {
                         dot.classList.remove('bg-white/40');
                         dot.classList.add('bg-white', 'opacity-100');
                     } else {
@@ -664,18 +692,13 @@
                 });
             }
 
-            dots.forEach((dot, idx) => {
-                dot.addEventListener('click', () => {
-                    currentIndex = idx;
-                    updateCarousel(currentIndex);
-                });
+            dots.forEach((dot, i) => {
+                dot.addEventListener('click', () => goToSlide(i));
             });
 
-            // Auto-avance opcional cada 5 segundos
             setInterval(() => {
-                currentIndex = (currentIndex + 1) % slideCount;
-                updateCarousel(currentIndex);
-            }, 5000);
+                goToSlide((currentIndex + 1) % total);
+            }, 4000);
         });
     </script>
 </body>
