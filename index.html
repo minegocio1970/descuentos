@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2host | Club VIP de Fidelización</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="2host VIP">
+    <link rel="apple-touch-icon" href="host.jpg">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -49,7 +57,6 @@
         #toast {
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
         }
-        /* Muescas laterales estilo Ticket */
         .ticket-notch-left {
             position: absolute;
             left: -10px;
@@ -78,6 +85,37 @@
 </head>
 <body class="min-h-full flex flex-col justify-between text-slate-800 bg-[#f8fafc]">
 
+    <!-- MODAL EMERGENTE PWA (PANTALLA DE INICIO) -->
+    <div id="pwa-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 space-y-5 text-center transform transition-transform duration-300 scale-95" id="pwa-modal-card">
+            <div class="w-16 h-16 bg-brand-50 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-sm border border-brand-100">
+                📲
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Guarda tu Tarjeta VIP</h3>
+                <p id="pwa-instructions" class="text-xs text-slate-500 leading-relaxed">
+                    Instala esta aplicación en tu pantalla de inicio para acceder rápidamente a tus cupones y beneficios exclusivos en cualquier momento.
+                </p>
+            </div>
+
+            <!-- INSTRUCCIONES ESPECÍFICAS SEGÚN SO -->
+            <div id="ios-steps" class="hidden bg-slate-50 p-3.5 rounded-2xl text-left border border-slate-200/60 text-xs text-slate-600 space-y-1.5">
+                <p class="font-bold text-slate-800">Para iPhone (Safari):</p>
+                <p>1. Toca el botón <strong>Compartir</strong> <span class="inline-block px-1 bg-slate-200 rounded">⎋</span> en la parte inferior.</p>
+                <p>2. Selecciona <strong>"Agregar a inicio"</strong> <span class="inline-block px-1 bg-slate-200 rounded">➕</span>.</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button onclick="closePwaModal()" class="w-full bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 text-xs font-extrabold py-3 px-4 rounded-xl transition-all">
+                    Omitir
+                </button>
+                <button id="pwa-action-btn" onclick="handlePwaInstall()" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-95 text-white text-xs font-extrabold py-3 px-4 rounded-xl transition-all shadow-md">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- NOTIFICACIÓN TOAST -->
     <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transform -translate-y-16 opacity-0 pointer-events-none">
         <div class="bg-slate-900/90 backdrop-blur-md text-white text-xs font-semibold px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 border border-slate-700/50">
@@ -90,11 +128,12 @@
     <main class="max-w-xl mx-auto px-4 py-6 sm:px-6 w-full space-y-6">
 
         <!-- BANNER PWA DISCRETO -->
-        <div class="bg-slate-900 text-slate-200 px-4 py-2.5 rounded-2xl text-[11px] font-medium flex items-center justify-between shadow-sm border border-slate-800">
+        <div onclick="openPwaModal()" class="cursor-pointer bg-slate-900 text-slate-200 px-4 py-2.5 rounded-2xl text-[11px] font-medium flex items-center justify-between shadow-sm border border-slate-800 hover:border-slate-700 transition-colors">
             <span class="flex items-center gap-2">
                 <span>📱</span>
-                <span>Guarda esta app en tu pantalla de inicio para no perder tus beneficios</span>
+                <span>Guarda esta app en tu pantalla de inicio</span>
             </span>
+            <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full font-bold text-brand-300">Instalar</span>
         </div>
 
         <!-- HEADER CON AVATAR -->
@@ -154,11 +193,11 @@
             </div>
         </section>
 
-        <!-- SECCIÓN DE CUPONES ACTUALIZADOS -->
+        <!-- SECCIÓN DE CUPONES -->
         <section class="space-y-4">
             <div class="flex items-center justify-between">
                 <h2 class="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                    <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 001 1.512A2 2 0 015 15v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 011-1.512A2 2 0 0021 10V7a2 2 0 00-2-2H5z"/></svg>
+                    <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 011 1.512A2 2 0 015 15v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 011-1.512A2 2 0 0021 10V7a2 2 0 00-2-2H5z"/></svg>
                     Cupones Promocionales VIP
                 </h2>
                 <span class="text-xs text-slate-500 font-medium">Toca para copiar código</span>
@@ -238,7 +277,7 @@
                     <div class="mt-4 pt-3 border-t border-dashed border-slate-200 flex items-center justify-between gap-2">
                         <button onclick="copyCode('ESTANCIA25', 'Súper Estancia (25%)')" class="bg-[#f1f5f9] hover:bg-slate-200 active:scale-95 text-[#0f172a] text-xs font-extrabold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 border border-slate-200/60">
                             <span>ESTANCIA25</span>
-                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 002 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                         </button>
                         <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20ESTANCIA25%20para%20S%C3%BAper%20Estancia" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
                             <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
@@ -247,41 +286,28 @@
                     </div>
                 </div>
 
-               <!-- Ticket 4: Vacaciones Aseguradas en Temporada Alta -->
-                <!-- Ticket 4: Vacaciones Aseguradas en Temporada Alta -->
-<div class="bg-white rounded-2xl p-4 shadow-ticket border border-slate-200/80 relative overflow-hidden">
-    <div class="ticket-notch-left"></div>
-    <div class="ticket-notch-right"></div>
+                <!-- Ticket 4: Anticipada Vacacional Temporada Alta -->
+                <div class="bg-white rounded-2xl p-4 shadow-ticket border border-slate-200/80 relative overflow-hidden">
+                    <div class="ticket-notch-left"></div>
+                    <div class="ticket-notch-right"></div>
 
-    <div class="flex items-center justify-between gap-3">
-        <div class="space-y-0.5">
-            <span class="text-[10px] font-black uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">Reserva 30 Días Antes (Mín. 5 Noches)</span>
-            <h3 class="text-sm font-bold text-slate-800"> Vacaciones Aseguradas en Temporada Alta</h3>
-        </div>
-        <div class="text-right shrink-0">
-            <span class="text-2xl font-black text-slate-900 tracking-tight">10% <span class="text-xs font-bold text-slate-500">OFF</span></span>
-        </div>
-    </div>
-
-    <div class="mt-4 pt-3 border-t border-dashed border-slate-200 flex items-center justify-between gap-2">
-        <button onclick="copyCode('EARLY10', '  Vacaciones Aseguradas en Temporada Alta(10%)')" class="bg-[#f1f5f9] hover:bg-slate-200 active:scale-95 text-[#0f172a] text-xs font-extrabold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 border border-slate-200/60">
-            <span>EARLY10</span>
-            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-        </button>
-        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20EARLY10%20para%20Anticipada%20Vacacional%20Temporada%20Alta" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
-            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-            Redimir
-        </a>
-    </div>
-</div>
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="space-y-0.5">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">Reserva 30+ Días Antes (Mín. 5 Noches)</span>
+                            <h3 class="text-sm font-bold text-slate-800">Anticipada Vacacional Temporada Alta</h3>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="text-2xl font-black text-slate-900 tracking-tight">10% <span class="text-xs font-bold text-slate-500">OFF</span></span>
+                        </div>
+                    </div>
 
                     <div class="mt-4 pt-3 border-t border-dashed border-slate-200 flex items-center justify-between gap-2">
-                        <button onclick="copyCode('EARLY10', 'Anticipada Vacacional (10%)')" class="bg-[#f1f5f9] hover:bg-slate-200 active:scale-95 text-[#0f172a] text-xs font-extrabold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 border border-slate-200/60">
+                        <button onclick="copyCode('EARLY10', 'Anticipada Vacacional Temporada Alta (10%)')" class="bg-[#f1f5f9] hover:bg-slate-200 active:scale-95 text-[#0f172a] text-xs font-extrabold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 border border-slate-200/60">
                             <span>EARLY10</span>
                             <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                         </button>
-                        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20EARLY10%20para%20Anticipada%20Vacacional" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
-                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20EARLY10%20para%20Anticipada%20Vacacional%20Temporada%20Alta" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                             Redimir
                         </a>
                     </div>
@@ -289,12 +315,21 @@
 
             </div>
 
-            <!-- Referidos -->
-            <div class="bg-amber-50/60 rounded-2xl p-4 border border-amber-200/50 flex gap-3 items-start">
-                <span class="text-lg leading-none">🎁</span>
-                <p class="text-xs text-amber-900 leading-relaxed font-medium">
-                    <strong class="font-bold">100% Transferibles:</strong> Puedes obsequiar estos cupones a amigos o familiares indicando tu nombre. <span class="underline decoration-amber-300 font-bold">¡Gana $500 MXN de crédito</span> en tu próxima reserva o un <span class="underline decoration-amber-300 font-bold">Check-out tardío garantizado</span> cuando tu referido complete su estancia!
-                </p>
+            <!-- Referidos y Compartir -->
+            <div class="bg-amber-50/60 rounded-2xl p-4 border border-amber-200/50 space-y-3">
+                <div class="flex gap-3 items-start">
+                    <span class="text-lg leading-none">🎁</span>
+                    <p class="text-xs text-amber-900 leading-relaxed font-medium">
+                        <strong class="font-bold">100% Transferibles:</strong> Puedes obsequiar estos cupones a amigos o familiares indicando tu nombre. <span class="underline decoration-amber-300 font-bold">¡Gana $500 MXN de crédito</span> en tu próxima reserva o un <span class="underline decoration-amber-300 font-bold">Check-out tardío garantizado</span> cuando tu referido complete su estancia!
+                    </p>
+                </div>
+
+                <div class="pt-1">
+                    <a href="https://api.whatsapp.com/send?text=Hola!%20te%20comparto%20estos%20descuentos%20de%20alojamiento%20en%20acapulco%2C%20estan%20geniales." target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                        <span>Compartir Descuentos por WhatsApp</span>
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -334,7 +369,7 @@
                                 <span class="font-bold text-slate-900 flex items-center gap-1">★ 4.98</span>
                             </div>
                             <h3 class="text-base font-bold text-slate-900">Descanso Total</h3>
-                            <p class="text-xs text-slate-500 mt-1 line-clamp-2">Experiencia de hospedaje superior y amenidades de primera clase.</p>
+                            <p class="text-xs text-slate-500 mt-1 line-clamp-2">Experiencia de hospedaje superior con vista al mar y amenidades de primera clase.</p>
                         </div>
 
                         <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
@@ -484,12 +519,12 @@
                 <div id="accordion-content" class="hidden px-4 pb-4 pt-1 text-[11px] text-slate-500 space-y-1.5 border-t border-slate-100">
                     <p>• Los cupones de descuento no son acumulables con otras promociones.</p>
                     <p>• Descuentos no aplicables en temporada súper alta ni puentes festivos, salvo previa autorización por escrito del anfitrión.</p>
-                    <p>• El cúpon de descuento aplica sobre el precio final del total de la estancia segun la plataforma de airbnb, reservando directamente por este medio.</p>
+                    <p>• Vigencia de los códigos promocionales: 12 meses a partir de la emisión de esta tarjeta digital.</p>
                     <p>• El beneficio de referido ($500 MXN o late check-out) se aplicará únicamente cuando la persona referida complete efectivamente su estancia.</p>
                 </div>
             </div>
 
-            <!-- SECCIÓN CRÉDITOS Y ENLACE A 2HOST.NET -->
+            <!-- SECCIÓN CRÉDITOS -->
             <div class="pt-4 text-center space-y-3 border-t border-slate-200/50">
                 <p class="text-xs text-slate-500 font-medium">
                     ¿Te gustaría una app de fidelización como esta para tus alojamientos?
@@ -508,10 +543,76 @@
 
     <!-- LOGICA JAVASCRIPT -->
     <script>
+        let deferredPrompt = null;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupCarousel('carousel-1', 4000);
+            setupCarousel('carousel-2', 4500);
+            setupCarousel('carousel-3', 5000);
+
+            if (!window.matchMedia('(display-mode: standalone)').matches) {
+                setTimeout(openPwaModal, 600);
+            }
+        });
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        function openPwaModal() {
+            const modal = document.getElementById('pwa-modal');
+            const modalCard = document.getElementById('pwa-modal-card');
+            const iosSteps = document.getElementById('ios-steps');
+            const actionBtn = document.getElementById('pwa-action-btn');
+            const instructions = document.getElementById('pwa-instructions');
+
+            if (isIOS) {
+                iosSteps.classList.remove('hidden');
+                actionBtn.textContent = 'Entendido';
+                instructions.textContent = 'Agrega esta tarjeta a tu pantalla de inicio siguiendo los pasos a continuación:';
+            } else {
+                iosSteps.classList.add('hidden');
+                actionBtn.textContent = 'Instalar App';
+                instructions.textContent = 'Instala esta aplicación en tu pantalla de inicio para acceder rápidamente a tus cupones exclusivos.';
+            }
+
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+            modal.classList.add('opacity-100');
+            modalCard.classList.remove('scale-95');
+            modalCard.classList.add('scale-100');
+        }
+
+        function closePwaModal() {
+            const modal = document.getElementById('pwa-modal');
+            const modalCard = document.getElementById('pwa-modal-card');
+
+            modalCard.classList.remove('scale-100');
+            modalCard.classList.add('scale-95');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function handlePwaInstall() {
+            if (isIOS) {
+                closePwaModal();
+            } else if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    deferredPrompt = null;
+                    closePwaModal();
+                });
+            } else {
+                showToast('Abre el menú de tu navegador y elige "Agregar a pantalla principal"');
+                closePwaModal();
+            }
+        }
+
         function copyCode(code, promoName) {
             navigator.clipboard.writeText(code).then(() => {
                 showToast(`¡Código ${code} copiado! (${promoName})`);
-            }).catch(err => {
+            }).catch(() => {
                 const textArea = document.createElement("textarea");
                 textArea.value = code;
                 document.body.appendChild(textArea);
@@ -574,12 +675,6 @@
                 });
             });
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            setupCarousel('carousel-1', 4000);
-            setupCarousel('carousel-2', 4500);
-            setupCarousel('carousel-3', 5000);
-        });
 
         function toggleAccordion() {
             const content = document.getElementById('accordion-content');
