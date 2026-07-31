@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50 antialiased selection:bg-sky-500 selection:text-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2host | Club VIP de Fidelización</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        emerald: {
+                            600: '#059669',
+                            700: '#047857',
+                        }
+                    },
+                    boxShadow: {
+                        'premium': '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
+                        'premium-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03)',
+                        'ticket': '0 8px 24px -4px rgba(15, 23, 42, 0.06)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        #toast {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        /* Muescas laterales estilo Ticket */
+        .ticket-notch-left {
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background-color: #f8fafc;
+            border-radius: 50%;
+            box-shadow: inset -2px 0 3px rgba(0,0,0,0.06);
+            z-index: 10;
+        }
+        .ticket-notch-right {
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background-color: #f8fafc;
+            border-radius: 50%;
+            box-shadow: inset 2px 0 3px rgba(0,0,0,0.06);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="min-h-full flex flex-col justify-between text-slate-800 bg-[#f8fafc]">
+
+    <!-- NOTIFICACIÓN TOAST -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transform -translate-y-16 opacity-0 pointer-events-none">
+        <div class="bg-slate-900/90 backdrop-blur-md text-white text-xs font-semibold px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 border border-slate-700/50">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            <span id="toast-text">¡Código copiado al portapapeles!</span>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-xl mx-auto px-4 py-6 sm:px-6 w-full space-y-6">
+
+        <!-- BANNER PWA DISCRETO -->
+        <div class="bg-slate-900 text-slate-200 px-4 py-2.5 rounded-2xl text-[11px] font-medium flex items-center justify-between shadow-sm border border-slate-800">
+            <span class="flex items-center gap-2">
+                <span>📱</span>
+                <span>Guarda esta app en tu pantalla de inicio para no perder tus beneficios</span>
+            </span>
+        </div>
+
+        <!-- HEADER CON AVATAR -->
+        <header class="bg-white rounded-3xl p-6 shadow-premium border border-slate-100 relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 w-32 h-32 bg-brand-50 rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div class="flex items-center gap-4 relative z-10">
+                <div class="shrink-0">
+                    <div class="w-[56px] h-[56px] rounded-full ring-2 ring-slate-200/80 p-0.5 overflow-hidden shadow-sm bg-slate-50">
+                        <img src="host.jpg" alt="Anfitriona 2host" class="w-full h-full object-cover rounded-full">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-1.5 mb-1 flex-wrap">
+                        <span class="text-[10px] font-extrabold tracking-widest text-brand-600 uppercase bg-brand-50 px-2 py-0.5 rounded-md">2host VIP Loyalty</span>
+                        <span class="bg-amber-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-sm flex items-center gap-1">
+                            <svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            Superhost 5★
+                        </span>
+                    </div>
+                    <h1 class="text-xl font-bold text-slate-900 tracking-tight">¡Quiero que regreses pronto!</h1>
+                    <p class="text-xs text-slate-500 font-medium">Beneficios exclusivos y tarifas directas garantizadas para tus próximas estancias.</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- TARJETA DE AHORRO -->
+        <section class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white shadow-2xl relative overflow-hidden border border-slate-700/50">
+            <div class="absolute top-0 right-0 w-48 h-48 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="relative z-10 space-y-4">
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-brand-100 border border-white/10">
+                    <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Reserva Directa Sin Comisiones
+                </div>
+
+                <div>
+                    <p class="text-xs text-slate-400 font-medium uppercase tracking-wider">Ahorro Estimado</p>
+                    <p class="text-2xl font-extrabold text-white tracking-tight mt-0.5">
+                        Ahorra de <span class="text-emerald-400">$1,800</span> a <span class="text-emerald-400">$3,500 MXN</span>
+                    </p>
+                    <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                        En una estancia promedio de 4 noches al omitir las tarifas de intermediario de las plataformas habituales.
+                    </p>
+                </div>
+
+                <div class="pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-300">
+                    <span class="flex items-center gap-1.5 font-medium">
+                        <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        Aceptamos Tarjetas de Crédito / Débito
+                    </span>
+                    <span class="bg-brand-500/20 text-brand-300 font-bold px-2.5 py-0.5 rounded-full border border-brand-500/30 text-[11px]">
+                        Hasta 3 MSI
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE CUPONES ACTUALIZADOS -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                    <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 001 1.512A2 2 0 015 15v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 011-1.512A2 2 0 0021 10V7a2 2 0 00-2-2H5z"/></svg>
+                    Cupones Promocionales VIP
+                </h2>
+                <span class="text-xs text-slate-500 font-medium">Toca para copiar código</span>
+            </div>
+
+            <div class="grid grid-cols-1 gap-3.5">
+                
+                <!-- Ticket 1: Escapada Express -->
+                <div class="bg-white rounded-2xl p-4 shadow-ticket border border-slate-200/80 relative overflow-hidden">
+                    <div class="ticket-notch-left"></div>
+                    <div class="ticket-notch-right"></div>
+
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="space-y-0.5">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-brand-600 bg-brand-50 px-2 py-0.5 rounded-md">3 Noches Exactas</span>
+                            <h3 class="text-sm font-bold text-slate-800">Escapada Express</h3>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="text-2xl font-black text-slate-900 tracking-tight">15% <span class="text-xs font-bold text-slate-500">OFF</span></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-dashed border-slate-200 flex items-center justify-between gap-2">
+                        <button onclick="copyCode('ESCAPA15', 'Escapada Express (15%)')" class="bg-[#f1f5f9] hover:bg-slate-200 active:scale-95 text-[#0f172a] text-xs font-extrabold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 border border-slate-200/60">
+                            <span>ESCAPA15</span>
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </button>
+                        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20ESCAPA15%20para%20Escapada%20Express" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                            Redimir
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Ticket 2: Semana Completa -->
+                <div class="bg-white rounded-2xl p-4 shadow-ticket border border-slate-200/80 relative overflow-hidden">
+                    <div class="ticket-notch-left"></div>
+                    <div class="ticket-notch-right"></div>
+
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="space-y-0.5">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-brand-600 bg-brand-50 px-2 py-0.5 rounded-md">4 a 6 Noches</span>
+                            <h3 class="text-sm font-bold text-slate-800">Semana Completa</h3>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="text-2xl font-black text-slate-900 tracking-tight">20% <span class="text-xs font-bold text-slate-500">OFF</span></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-dashed border-slate-200 flex items-center justify-between gap-2">
+                        <button onclick="copyCode('SEMANA20', 'Semana Completa (20%)')" class="bg-[#f1f5f9] hover:bg-slate-200 active:scale-95 text-[#0f172a] text-xs font-extrabold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 border border-slate-200/60">
+                            <span>SEMANA20</span>
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </button>
+                        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20SEMANA20%20para%20Semana%20Completa" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                            Redimir
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Ticket 3: Súper Estancia -->
+                <div class="bg-white rounded-2xl p-4 shadow-ticket border border-slate-200/80 relative overflow-hidden">
+                    <div class="ticket-notch-left"></div>
+                    <div class="ticket-notch-right"></div>
+
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="space-y-0.5">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-brand-600 bg-brand-50 px-2 py-0.5 rounded-md">7 Noches o más</span>
+                            <h3 class="text-sm font-bold text-slate-800">Súper Estancia</h3>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="text-2xl font-black text-slate-900 tracking-tight">25% <span class="text-xs font-bold text-slate-500">OFF</span></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-dashed border-slate-200 flex items-center justify-between gap-2">
+                        <button onclick="copyCode('ESTANCIA25', 'Súper Estancia (25%)')" class="bg-[#f1f5f9] hover:bg-slate-200 active:scale-95 text-[#0f172a] text-xs font-extrabold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 border border-slate-200/60">
+                            <span>ESTANCIA25</span>
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </button>
+                        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20ESTANCIA25%20para%20S%C3%BAper%20Estancia" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                            Redimir
+                        </a>
+                    </div>
+                </div>
+
+               <!-- Ticket 4: Vacaciones Aseguradas en Temporada Alta -->
+                <!-- Ticket 4: Vacaciones Aseguradas en Temporada Alta -->
+<div class="bg-white rounded-2xl p-4 shadow-ticket border border-slate-200/80 relative overflow-hidden">
+    <div class="ticket-notch-left"></div>
+    <div class="ticket-notch-right"></div>
+
+    <div class="flex items-center justify-between gap-3">
+        <div class="space-y-0.5">
+            <span class="text-[10px] font-black uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">Reserva 30 Días Antes (Mín. 5 Noches)</span>
+            <h3 class="text-sm font-bold text-slate-800"> Vacaciones Aseguradas en Temporada Alta</h3>
+        </div>
+        <div class="text-right shrink-0">
+            <span class="text-2xl font-black text-slate-900 tracking-tight">10% <span class="text-xs font-bold text-slate-500">OFF</span></span>
+        </div>
+    </div>
+
+    <div class="mt-4 pt-3 border-t border-dashed border-slate-200 flex items-center justify-between gap-2">
+        <button onclick="copyCode('EARLY10', '  Vacaciones Aseguradas en Temporada Alta(10%)')" class="bg-[#f1f5f9] hover:bg-slate-200 active:scale-95 text-[#0f172a] text-xs font-extrabold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 border border-slate-200/60">
+            <span>EARLY10</span>
+            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        </button>
+        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20EARLY10%20para%20Anticipada%20Vacacional%20Temporada%20Alta" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+            Redimir
+        </a>
+    </div>
+</div>
+
+                    <div class="mt-4 pt-3 border-t border-dashed border-slate-200 flex items-center justify-between gap-2">
+                        <button onclick="copyCode('EARLY10', 'Anticipada Vacacional (10%)')" class="bg-[#f1f5f9] hover:bg-slate-200 active:scale-95 text-[#0f172a] text-xs font-extrabold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 border border-slate-200/60">
+                            <span>EARLY10</span>
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </button>
+                        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20quiero%20aplicar%20el%20cup%C3%B3n%20EARLY10%20para%20Anticipada%20Vacacional" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                            Redimir
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Referidos -->
+            <div class="bg-amber-50/60 rounded-2xl p-4 border border-amber-200/50 flex gap-3 items-start">
+                <span class="text-lg leading-none">🎁</span>
+                <p class="text-xs text-amber-900 leading-relaxed font-medium">
+                    <strong class="font-bold">100% Transferibles:</strong> Puedes obsequiar estos cupones a amigos o familiares indicando tu nombre. <span class="underline decoration-amber-300 font-bold">¡Gana $500 MXN de crédito</span> en tu próxima reserva o un <span class="underline decoration-amber-300 font-bold">Check-out tardío garantizado</span> cuando tu referido complete su estancia!
+                </p>
+            </div>
+        </section>
+
+        <!-- GALERÍA DE ALOJAMIENTOS -->
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-base font-bold text-slate-900 tracking-tight">Nuestros Alojamientos</h2>
+                <p class="text-xs text-slate-500">Ubicaciones exclusivas en Acapulco Diamante</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6">
+
+                <!-- TARJETA 1 -->
+                <article class="bg-white rounded-3xl overflow-hidden shadow-premium border border-slate-100 hover:shadow-premium-hover transition-all duration-300 flex flex-col">
+                    <div class="relative aspect-[16/10] bg-slate-100 overflow-hidden group" id="carousel-1">
+                        <div class="carousel-track flex h-full transition-transform duration-700 ease-out">
+                            <img src="descanso%20(1).png" class="w-full h-full object-cover shrink-0" alt="Descanso Total - Vista 1">
+                            <img src="descanso%20(2).png" class="w-full h-full object-cover shrink-0" alt="Descanso Total - Vista 2">
+                            <img src="descanso%20(3).png" class="w-full h-full object-cover shrink-0" alt="Descanso Total - Vista 3">
+                        </div>
+
+                        <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10 glass-card px-3 py-1.5 rounded-full">
+                            <button class="dot w-2 h-2 rounded-full bg-white transition-all opacity-100"></button>
+                            <button class="dot w-2 h-2 rounded-full bg-white/40 transition-all hover:bg-white/70"></button>
+                            <button class="dot w-2 h-2 rounded-full bg-white/40 transition-all hover:bg-white/70"></button>
+                        </div>
+
+                        <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full border border-white/10">
+                            Acapulco VIP
+                        </div>
+                    </div>
+
+                    <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+                                <span>Acapulco, Guerrero</span>
+                                <span class="font-bold text-slate-900 flex items-center gap-1">★ 4.98</span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900">Descanso Total</h3>
+                            <p class="text-xs text-slate-500 mt-1 line-clamp-2">Experiencia de hospedaje superior y amenidades de primera clase.</p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <a href="https://airbnb.mx/h/hoteles-en-acapulco" target="_blank" class="text-xs font-bold text-slate-700 hover:text-brand-600 flex items-center gap-1 transition-colors">
+                                Ver en Airbnb
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                            <a href="https://wa.me/527771357748?text=Hola%202host%2C%20me%20interesa%20reservar%20Descanso%20Total%20directamente" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                Cotizar Directo
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- TARJETA 2 -->
+                <article class="bg-white rounded-3xl overflow-hidden shadow-premium border border-slate-100 hover:shadow-premium-hover transition-all duration-300 flex flex-col">
+                    <div class="relative aspect-[16/10] bg-slate-100 overflow-hidden group" id="carousel-2">
+                        <div class="carousel-track flex h-full transition-transform duration-700 ease-out">
+                            <img src="escapada%20(1).jpg" class="w-full h-full object-cover shrink-0" alt="Escapada Romántica - Vista 1">
+                            <img src="escapada%20(2).jpg" class="w-full h-full object-cover shrink-0" alt="Escapada Romántica - Vista 2">
+                            <img src="escapada%20(3).jpg" class="w-full h-full object-cover shrink-0" alt="Escapada Romántica - Vista 3">
+                        </div>
+
+                        <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10 glass-card px-3 py-1.5 rounded-full">
+                            <button class="dot w-2 h-2 rounded-full bg-white transition-all opacity-100"></button>
+                            <button class="dot w-2 h-2 rounded-full bg-white/40 transition-all hover:bg-white/70"></button>
+                            <button class="dot w-2 h-2 rounded-full bg-white/40 transition-all hover:bg-white/70"></button>
+                        </div>
+
+                        <div class="absolute top-3 right-3 bg-amber-500/90 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full border border-white/10">
+                            Top Parejas
+                        </div>
+                    </div>
+
+                    <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+                                <span>Acapulco Diamante</span>
+                                <span class="font-bold text-slate-900 flex items-center gap-1">★ 5.0</span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900">Escapada Romántica — Torre Blanca</h3>
+                            <p class="text-xs text-slate-500 mt-1 line-clamp-2">Espacio íntimo, privado y diseñado para el descanso en pareja con atardeceres únicos.</p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <a href="https://airbnb.mx/h/escapada-romantica-condominio-torre-blanca-acapulco-diamante" target="_blank" class="text-xs font-bold text-slate-700 hover:text-brand-600 flex items-center gap-1 transition-colors">
+                                Ver en Airbnb
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                            <a href="https://wa.me/527771357748?text=Hola%202host%2C%20me%20interesa%20reservar%20la%20Escapada%20Rom%C3%A1ntica%20en%20Torre%20Blanca" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                Cotizar Directo
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- TARJETA 3 -->
+                <article class="bg-white rounded-3xl overflow-hidden shadow-premium border border-slate-100 hover:shadow-premium-hover transition-all duration-300 flex flex-col">
+                    <div class="relative aspect-[16/10] bg-slate-100 overflow-hidden group" id="carousel-3">
+                        <div class="carousel-track flex h-full transition-transform duration-700 ease-out">
+                            <img src="condominio%20torre%20blanca%20(1).jpg" class="w-full h-full object-cover shrink-0" alt="Condominio Torre Blanca - Vista 1">
+                            <img src="condominio%20torre%20blanca%20(2).jpg" class="w-full h-full object-cover shrink-0" alt="Condominio Torre Blanca - Vista 2">
+                            <img src="condominio%20torre%20blanca%20(3).png" class="w-full h-full object-cover shrink-0" alt="Condominio Torre Blanca - Vista 3">
+                        </div>
+
+                        <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10 glass-card px-3 py-1.5 rounded-full">
+                            <button class="dot w-2 h-2 rounded-full bg-white transition-all opacity-100"></button>
+                            <button class="dot w-2 h-2 rounded-full bg-white/40 transition-all hover:bg-white/70"></button>
+                            <button class="dot w-2 h-2 rounded-full bg-white/40 transition-all hover:bg-white/70"></button>
+                        </div>
+
+                        <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full border border-white/10">
+                            Favorito de Huéspedes
+                        </div>
+                    </div>
+
+                    <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+                                <span>Zona Exclusiva</span>
+                                <span class="font-bold text-slate-900 flex items-center gap-1">★ 4.96</span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900">Condominio Torre Blanca</h3>
+                            <p class="text-xs text-slate-500 mt-1 line-clamp-2">Seguridad 24/7, alberca, acceso controlado y confort total para tus vacaciones.</p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <a href="https://airbnb.mx/h/condominio-torre-blanca" target="_blank" class="text-xs font-bold text-slate-700 hover:text-brand-600 flex items-center gap-1 transition-colors">
+                                Ver en Airbnb
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                            <a href="https://wa.me/527771357748?text=Hola%202host%2C%20me%20interesa%20reservar%20Condominio%20Torre%20Blanca" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                Cotizar Directo
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- TARJETA 4: GRUPOS -->
+                <article class="bg-gradient-to-br from-slate-900 via-brand-900 to-slate-900 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden flex flex-col justify-between border border-slate-800">
+                    <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-brand-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <div class="space-y-3 relative z-10">
+                        <div class="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-brand-100 border border-white/10">
+                            <svg class="w-3.5 h-3.5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5-3.512M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015-3.512M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                            Capacidad Adaptable (2 a 8 personas)
+                        </div>
+                        <h3 class="text-xl font-extrabold text-white tracking-tight">Opciones para Todos los Grupos</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            ¿Viajas con familia extensa o un grupo grande de amigos? Coordinamos múltiples departamentos o unidades integradas con capacidad desde 2 hasta 8 personas para mantener a todos juntos con total comodidad.
+                        </p>
+                    </div>
+
+                    <div class="pt-6 relative z-10">
+                        <a href="https://wa.me/527771357748?text=Hola%202host%2C%20busco%20disponibilidad%20para%20un%20grupo%20de%20%5BX%5D%20personas" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-98 text-white font-bold text-xs py-3.5 px-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 border border-emerald-500/30">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                            Consultar Disponibilidad para Grupos
+                        </a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- FOOTER & CRÉDITOS -->
+        <footer class="pt-6 pb-12 border-t border-slate-200/80 space-y-6">
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/60 flex items-center gap-3.5">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-slate-900">Reserva Directa 100% Segura con 2host</h4>
+                    <p class="text-[11px] text-slate-500 leading-tight mt-0.5">
+                        Somos Superhosts verificados en Airbnb con <strong class="text-slate-700">más de 1,000 evaluaciones de 5 estrellas</strong>. Tu estancia está totalmente garantizada.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200/60 overflow-hidden">
+                <button onclick="toggleAccordion()" class="w-full px-4 py-3.5 text-left text-xs font-bold text-slate-700 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                    <span>Términos y Condiciones del Club VIP</span>
+                    <svg id="accordion-icon" class="w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div id="accordion-content" class="hidden px-4 pb-4 pt-1 text-[11px] text-slate-500 space-y-1.5 border-t border-slate-100">
+                    <p>• Los cupones de descuento no son acumulables con otras promociones.</p>
+                    <p>• Descuentos no aplicables en temporada súper alta ni puentes festivos, salvo previa autorización por escrito del anfitrión.</p>
+                    <p>• El cúpon de descuento aplica sobre el precio final del total de la estancia segun la plataforma de airbnb, reservando directamente por este medio.</p>
+                    <p>• El beneficio de referido ($500 MXN o late check-out) se aplicará únicamente cuando la persona referida complete efectivamente su estancia.</p>
+                </div>
+            </div>
+
+            <!-- SECCIÓN CRÉDITOS Y ENLACE A 2HOST.NET -->
+            <div class="pt-4 text-center space-y-3 border-t border-slate-200/50">
+                <p class="text-xs text-slate-500 font-medium">
+                    ¿Te gustaría una app de fidelización como esta para tus alojamientos?
+                </p>
+                <div>
+                    <a href="https://2host.net" target="_blank" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-brand-600 text-white text-xs font-bold px-4 py-2 rounded-full transition-all shadow-sm active:scale-95">
+                        <span>Diseñado y desarrollado por 2host</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </a>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-2">© 2026 2host. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- LOGICA JAVASCRIPT -->
+    <script>
+        function copyCode(code, promoName) {
+            navigator.clipboard.writeText(code).then(() => {
+                showToast(`¡Código ${code} copiado! (${promoName})`);
+            }).catch(err => {
+                const textArea = document.createElement("textarea");
+                textArea.value = code;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast(`¡Código ${code} copiado!`);
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            toastText.textContent = message;
+            
+            toast.classList.remove('opacity-0', '-translate-y-16', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', '-translate-y-16', 'pointer-events-none');
+            }, 3000);
+        }
+
+        function setupCarousel(containerId, intervalMs = 4000) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const track = container.querySelector('.carousel-track');
+            const dots = container.querySelectorAll('.dot');
+            let currentIndex = 0;
+            const totalSlides = 3;
+
+            function updateCarousel() {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                dots.forEach((dot, idx) => {
+                    if (idx === currentIndex) {
+                        dot.classList.remove('bg-white/40');
+                        dot.classList.add('bg-white', 'opacity-100');
+                    } else {
+                        dot.classList.remove('bg-white', 'opacity-100');
+                        dot.classList.add('bg-white/40');
+                    }
+                });
+            }
+
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateCarousel();
+            }
+
+            let timer = setInterval(nextSlide, intervalMs);
+
+            dots.forEach((dot, idx) => {
+                dot.addEventListener('click', () => {
+                    clearInterval(timer);
+                    currentIndex = idx;
+                    updateCarousel();
+                    timer = setInterval(nextSlide, intervalMs);
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupCarousel('carousel-1', 4000);
+            setupCarousel('carousel-2', 4500);
+            setupCarousel('carousel-3', 5000);
+        });
+
+        function toggleAccordion() {
+            const content = document.getElementById('accordion-content');
+            const icon = document.getElementById('accordion-icon');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+    </script>
+</body>
+</html>
